@@ -1,8 +1,3 @@
-/*
- * Docs here: https://www.cs.princeton.edu/~appel/modern/java/CUP/manual.html
-*/
-
-/* ----------------------Preliminary Declarations Section--------------------*/
 import java_cup.runtime.*;
 
 /* Parser code to change the way the parser reports errors (include
@@ -21,90 +16,89 @@ parser code {:
 
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, CARET, COLON, V_BAR, ARROW, COMMA, QUESTION, DOT, DOUBLE_EQ, DO, OD;
-terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE, INTERSECTION, DIFFERENCE;
-terminal           L_ANGLE_EQ, R_ANGLE_EQ, AND, OR, NOT, NOT_EQ;
-terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHARACTER, DICT, SEQ, TOP, SET, THREAD;
-terminal           MAIN, IN, READ, PRINT, RETURN, BREAK, CONCAT, TYPEDEF, ALIAS, FUNCTION_DEF;
-terminal           IF, FI, THEN, ELSE, LOOP, POOL, ELIF, WHILE, FORALL;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, MULT, DIV, IMPLY, XOR, COLON, COMMA, DOT, LT, GT, INTERSECTION, UNION, DIFFERENCE;
+terminal           LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK;
+terminal           LTEQ, GTEQ, AND, OR, NOT, NOTEQ;
+terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHAR, DICT, SEQ, SET, TOP;
+terminal           MAIN, IN, READ, PRINT, RETURN, BREAK, CONCAT, TDEF, FDEF, ALIAS, OD, DO, THREAD;
+terminal           IF, FI, THEN, ELSE, LOOP, POOL, WHILE, FORALL, ELIF;
 terminal           IDENTIFIER, NUMBER, STRING, FUNCTION;
 
 non terminal       program, main, codeblock, identifier, accessor, thread;
 non terminal       type, subtype, dicttype, seqtype, settype;
-non terminal       expression_list, dictvalue, seqvalue, dictitems, seqitems, setvalue, setitems;
+non terminal       expression_list, dictvalue, seqvalue, setvalue, dictitems, seqitems, setitems;
 non terminal       expression, operator, comparator, expression_or_null;
-non terminal       declarations, declaration, type_declaration, assignment, tdef, alias;
-non terminal       statements, statement, print, read, loop, break, if_statement, return_statement, while_statement, elif_block, _elif_statement, elif_statement, else_statement, forall_statement;
+non terminal       declaration_list, declaration, type_declaration, assignment, tdef, alias;
+non terminal       stat_list, stat, print, read, loop, break, if_stat, return_stat, else_stat, elif_stat, _elif_stat, forall_stat, elif_block, while_stat;
 non terminal       function, function_call, return_type, args, _args, params, _params, _lambda_return, lambda_return, function_lambda;
-
-non terminal       statement_with_break, statements_with_break, elif_block_break, _elif_statement_break, elif_statement_break, else_statement_break, if_statement_with_break, codeblock_with_break;
+non terminal       stat_with_break, stat_list_with_break, elif_block_break, elif_stat_break, _elif_stat_break, else_stat_break, if_stat_with_break, codeblock_with_break;
 
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
-precedence left AND, TIMES, DIVIDE, DIFFERENCE, V_BAR, INTERSECTION;
+precedence left AND, MULT, DIV, DIFFERENCE, INTERSECTION, UNION;
 precedence left CONCAT;
-precedence right IN, CARET;
-precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ, DOUBLE_EQ;
-precedence nonassoc IMPLY, ARROW;
+precedence right IN, XOR;
+precedence nonassoc NOT, LT, LTEQ, GT, GTEQ, EQEQ, NOTEQ, EQ;
+precedence nonassoc IMPLY;
 
 
 /* ------------Grammar----------- */
-program ::= declarations main;
+program ::= declaration_list main;
 
-main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
+main ::= MAIN LBRACE codeblock RBRACE SEMI;
 
-codeblock ::= declarations statements;
+codeblock ::= declaration_list stat_list;
 
 // Identifier
 identifier ::= accessor DOT identifier | accessor;
 accessor ::= IDENTIFIER
-             | IDENTIFIER L_SQUARE expression R_SQUARE
-             | IDENTIFIER L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
-             | IDENTIFIER L_SQUARE expression R_SQUARE L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
-             | IDENTIFIER L_SQUARE expression R_SQUARE L_SQUARE expression R_SQUARE
+             | IDENTIFIER LBRACK expression RBRACK
+             | IDENTIFIER LBRACK expression_or_null COLON expression_or_null RBRACK
+             | IDENTIFIER LBRACK expression RBRACK LBRACK expression_or_null COLON expression_or_null RBRACK
+             | IDENTIFIER LBRACK expression RBRACK LBRACK expression RBRACK
              | function_call
-             | function_call L_SQUARE expression R_SQUARE
-             | function_call L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
+             | function_call LBRACK expression RBRACK
+             | function_call LBRACK expression_or_null COLON expression_or_null RBRACK
              ;
 
 // Types
-type ::= dicttype | seqtype | CHARACTER | INTEGER | RATIONAL | FLOAT | IDENTIFIER | settype | FUNCTION;
+type ::= dicttype | seqtype | settype | CHAR | INTEGER | RATIONAL | FLOAT | IDENTIFIER | FUNCTION;
 subtype ::= type | TOP;
-dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
-seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
-settype ::= SET L_ANGLE type R_ANGLE;
+dicttype ::= DICT LT subtype COMMA subtype GT;
+seqtype ::= SEQ LT subtype GT;
+settype ::= SET LT type GT;
 
 // Values
 expression_list ::= expression | expression COMMA expression_list;
 
-dictvalue ::= L_ROUND dictitems R_ROUND | L_ROUND R_ROUND;
+dictvalue ::= LPAREN dictitems RPAREN | LPAREN RPAREN;
 dictitems ::= expression COLON expression
             | expression COLON expression COMMA dictitems;
 
-seqvalue ::= L_SQUARE seqitems R_SQUARE
-           | L_SQUARE R_SQUARE
+seqvalue ::= LBRACK seqitems RBRACK
+           | LBRACK RBRACK
            | STRING;
 seqitems ::= expression | expression COMMA seqitems;
 
-setvalue ::= L_CURLY setitems R_CURLY | L_CURLY R_CURLY;
+setvalue ::= LBRACE setitems RBRACE | LBRACE RBRACE;
 setitems ::= expression | expression COMMA setitems;
 
-_lambda_return ::= V_BAR expression V_BAR ARROW;
+_lambda_return ::= UNION expression UNION IMPLY;
 lambda_return ::= _lambda_return | _lambda_return lambda_return;
-function_lambda ::= lambda_return L_CURLY return_statement R_CURLY
+function_lambda ::= lambda_return LBRACE return_stat RBRACE
                   | lambda_return expression;
 
 // Expression
-operator ::= PLUS | MINUS | TIMES | DIVIDE | CARET;
-comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ | DOUBLE_EQ | DIFFERENCE | V_BAR | INTERSECTION;
+operator ::= PLUS | MINUS | MULT | DIV | XOR;
+comparator ::= AND | OR | EQEQ | IMPLY | LT | GT | LTEQ | GTEQ | NOTEQ | DIFFERENCE | UNION | INTERSECTION;
 
 expression ::= expression operator expression
              | expression comparator expression
              | expression CONCAT expression
              | expression IN expression
              | NOT expression
-             | L_ROUND expression R_ROUND
+             | LPAREN expression RPAREN
              | dictvalue
              | seqvalue
              | setvalue
@@ -112,17 +106,17 @@ expression ::= expression operator expression
              | BOOLEAN
              | MINUS expression
              | NUMBER
-             | CHARACTER
+             | CHAR
              | identifier
-             | DOUBLE_EQ
+             | EQEQ
              ;
 
 expression_or_null ::= expression |;
 
-// Declarations
-declarations ::= declarations declaration|;
+// declarations
+declaration_list ::= declaration_list declaration|;
 declaration ::= type_declaration SEMI
-			  | type_declaration EQ expression_list SEMI
+              | type_declaration EQ expression_list SEMI
               | tdef
               | alias
               | function
@@ -131,20 +125,21 @@ declaration ::= type_declaration SEMI
 
 type_declaration ::= type IDENTIFIER;
 
-tdef ::= TYPEDEF IDENTIFIER L_CURLY params R_CURLY SEMI;
+tdef ::= TDEF IDENTIFIER LBRACE params RBRACE SEMI;
 alias ::= ALIAS type type SEMI;
-thread ::= THREAD IDENTIFIER EQ L_CURLY codeblock R_CURLY SEMI;
-// Statement
-statements ::= statement statements | statement;
+thread ::= THREAD IDENTIFIER EQ LBRACE codeblock RBRACE SEMI;
 
-statement ::= loop
-            | if_statement
-            | while_statement
-            | forall_statement
+// statements
+stat_list ::= stat stat_list | stat;
+
+stat ::= loop
+            | if_stat
+            | while_stat
+            | forall_stat
             | read
             | print
             | assignment
-            | return_statement
+            | return_stat
             | function_call SEMI
             ;
 
@@ -154,33 +149,33 @@ print ::= PRINT expression SEMI;
 read ::= READ identifier SEMI;
 loop ::= LOOP codeblock_with_break POOL;
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
-return_statement ::= RETURN SEMI | RETURN expression SEMI;
-if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock elif_statement else_statement FI;
-elif_block ::= ELIF L_ROUND expression R_ROUND THEN codeblock;
-_elif_statement ::= elif_block | elif_block _elif_statement;
-elif_statement ::= _elif_statement |;
-else_statement ::= ELSE codeblock |;
-while_statement ::= WHILE L_ROUND expression R_ROUND DO codeblock_with_break OD;
-forall_statement ::= FORALL L_ROUND expression IN expression R_ROUND DO codeblock OD;
+return_stat ::= RETURN SEMI | RETURN expression SEMI;
+if_stat ::= IF LPAREN expression RPAREN THEN codeblock elif_stat else_stat FI;
+elif_block ::= ELIF LPAREN expression RPAREN THEN codeblock;
+_elif_stat ::= elif_block | elif_block _elif_stat;
+elif_stat ::= _elif_stat |;
+else_stat ::= ELSE codeblock |;
+while_stat ::= WHILE LPAREN expression RPAREN DO codeblock_with_break OD;
+forall_stat ::= FORALL LPAREN expression IN expression RPAREN DO codeblock OD;
 
-codeblock_with_break ::= declarations statements_with_break;
-statements_with_break ::= statement_with_break statements_with_break | statement_with_break;
+codeblock_with_break ::= declaration_list stat_list_with_break;
+stat_list_with_break ::= stat_with_break stat_list_with_break | stat_with_break;
 
-statement_with_break ::= while_statement
+stat_with_break ::= while_stat
             | break
-            | if_statement_with_break
+            | if_stat_with_break
             | read
             | print
             | assignment
-            | return_statement
+            | return_stat
             | function_call SEMI
             ;
 
-elif_block_break ::= ELIF L_ROUND expression R_ROUND THEN codeblock_with_break;
-_elif_statement_break ::= elif_block_break | elif_block_break _elif_statement_break;
-elif_statement_break ::= _elif_statement_break |;
-else_statement_break ::= ELSE codeblock_with_break |;
-if_statement_with_break ::= IF L_ROUND expression R_ROUND THEN codeblock_with_break elif_statement_break else_statement_break FI;
+elif_block_break ::= ELIF LPAREN expression RPAREN THEN codeblock_with_break;
+_elif_stat_break ::= elif_block_break | elif_block_break _elif_stat_break;
+elif_stat_break ::= _elif_stat_break |;
+else_stat_break ::= ELSE codeblock_with_break |;
+if_stat_with_break ::= IF LPAREN expression RPAREN THEN codeblock_with_break elif_stat_break else_stat_break FI;
 
 
 // Functions
@@ -190,9 +185,9 @@ params ::= _params |;
 _args ::= expression | expression COMMA _args;
 args ::= _args |;
 
-function_call ::= IDENTIFIER L_ROUND args R_ROUND;
+function_call ::= IDENTIFIER LPAREN args RPAREN;
 
-function ::= FUNCTION_DEF type IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY SEMI
-            | FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY SEMI;
+function ::= FDEF type IDENTIFIER LPAREN params RPAREN LBRACE codeblock RBRACE SEMI
+            | FDEF IDENTIFIER LPAREN params RPAREN LBRACE codeblock RBRACE SEMI;
 
 return_type ::= COLON type |;

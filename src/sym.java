@@ -6,75 +6,72 @@
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int FORALL = 64;
-  public static final int SEQ = 42;
-  public static final int DIVIDE = 8;
-  public static final int FUNCTION = 68;
-  public static final int CONCAT = 52;
-  public static final int POOL = 61;
-  public static final int INTEGER = 36;
-  public static final int L_ROUND = 20;
-  public static final int R_SQUARE = 27;
+  public static final int FORALL = 60;
+  public static final int SEQ = 37;
+  public static final int FUNCTION = 65;
+  public static final int GTEQ = 26;
+  public static final int MULT = 7;
+  public static final int CHAR = 35;
+  public static final int CONCAT = 46;
+  public static final int LTEQ = 25;
+  public static final int POOL = 58;
+  public static final int XOR = 10;
+  public static final int INTEGER = 31;
+  public static final int LPAREN = 19;
   public static final int SEMI = 2;
-  public static final int R_ROUND = 21;
   public static final int MINUS = 6;
-  public static final int CHARACTER = 40;
-  public static final int NOT = 34;
-  public static final int AND = 32;
-  public static final int RATIONAL = 38;
-  public static final int L_ANGLE_EQ = 30;
-  public static final int IN = 47;
-  public static final int OR = 33;
-  public static final int COMMA = 14;
-  public static final int FI = 57;
-  public static final int THREAD = 45;
-  public static final int LOOP = 60;
-  public static final int TYPEDEF = 53;
+  public static final int RPAREN = 20;
+  public static final int NOT = 29;
+  public static final int AND = 27;
+  public static final int LT = 14;
+  public static final int RATIONAL = 33;
+  public static final int TDEF = 47;
+  public static final int IN = 41;
+  public static final int OR = 28;
+  public static final int COMMA = 12;
+  public static final int FI = 54;
+  public static final int THREAD = 52;
+  public static final int DIV = 8;
+  public static final int LOOP = 57;
   public static final int PLUS = 5;
-  public static final int IF = 56;
-  public static final int MAIN = 46;
-  public static final int CARET = 10;
-  public static final int DOT = 16;
-  public static final int BOOLEAN = 37;
+  public static final int IF = 53;
+  public static final int MAIN = 40;
+  public static final int DOT = 13;
   public static final int EOF = 0;
-  public static final int RETURN = 50;
-  public static final int OD = 19;
+  public static final int BOOLEAN = 32;
+  public static final int OD = 50;
+  public static final int RETURN = 44;
   public static final int error = 1;
-  public static final int L_CURLY = 22;
-  public static final int INTERSECTION = 28;
-  public static final int R_CURLY = 23;
-  public static final int DOUBLE_EQ = 17;
+  public static final int INTERSECTION = 16;
   public static final int EQEQ = 4;
-  public static final int R_ANGLE_EQ = 31;
-  public static final int NUMBER = 66;
-  public static final int FUNCTION_DEF = 55;
-  public static final int BREAK = 51;
+  public static final int NUMBER = 63;
+  public static final int FDEF = 48;
+  public static final int BREAK = 45;
   public static final int EQ = 3;
   public static final int IMPLY = 9;
-  public static final int TOP = 43;
-  public static final int TIMES = 7;
-  public static final int ARROW = 13;
-  public static final int L_ANGLE = 24;
+  public static final int TOP = 39;
+  public static final int LBRACK = 23;
   public static final int COLON = 11;
-  public static final int ELSE = 59;
-  public static final int DICT = 41;
-  public static final int R_ANGLE = 25;
-  public static final int READ = 48;
-  public static final int L_SQUARE = 26;
-  public static final int V_BAR = 12;
-  public static final int NOT_EQ = 35;
-  public static final int DIFFERENCE = 29;
-  public static final int WHILE = 63;
-  public static final int FLOAT = 39;
-  public static final int THEN = 58;
-  public static final int STRING = 67;
-  public static final int QUESTION = 15;
-  public static final int ALIAS = 54;
-  public static final int ELIF = 62;
-  public static final int PRINT = 49;
-  public static final int DO = 18;
-  public static final int SET = 44;
-  public static final int IDENTIFIER = 65;
+  public static final int UNION = 17;
+  public static final int ELSE = 56;
+  public static final int DICT = 36;
+  public static final int LBRACE = 21;
+  public static final int READ = 42;
+  public static final int RBRACK = 24;
+  public static final int DIFFERENCE = 18;
+  public static final int WHILE = 59;
+  public static final int FLOAT = 34;
+  public static final int THEN = 55;
+  public static final int RBRACE = 22;
+  public static final int STRING = 64;
+  public static final int ALIAS = 49;
+  public static final int GT = 15;
+  public static final int ELIF = 61;
+  public static final int DO = 51;
+  public static final int PRINT = 43;
+  public static final int SET = 38;
+  public static final int NOTEQ = 30;
+  public static final int IDENTIFIER = 62;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -83,45 +80,39 @@ public class sym {
   "EQEQ",
   "PLUS",
   "MINUS",
-  "TIMES",
-  "DIVIDE",
+  "MULT",
+  "DIV",
   "IMPLY",
-  "CARET",
+  "XOR",
   "COLON",
-  "V_BAR",
-  "ARROW",
   "COMMA",
-  "QUESTION",
   "DOT",
-  "DOUBLE_EQ",
-  "DO",
-  "OD",
-  "L_ROUND",
-  "R_ROUND",
-  "L_CURLY",
-  "R_CURLY",
-  "L_ANGLE",
-  "R_ANGLE",
-  "L_SQUARE",
-  "R_SQUARE",
+  "LT",
+  "GT",
   "INTERSECTION",
+  "UNION",
   "DIFFERENCE",
-  "L_ANGLE_EQ",
-  "R_ANGLE_EQ",
+  "LPAREN",
+  "RPAREN",
+  "LBRACE",
+  "RBRACE",
+  "LBRACK",
+  "RBRACK",
+  "LTEQ",
+  "GTEQ",
   "AND",
   "OR",
   "NOT",
-  "NOT_EQ",
+  "NOTEQ",
   "INTEGER",
   "BOOLEAN",
   "RATIONAL",
   "FLOAT",
-  "CHARACTER",
+  "CHAR",
   "DICT",
   "SEQ",
-  "TOP",
   "SET",
-  "THREAD",
+  "TOP",
   "MAIN",
   "IN",
   "READ",
@@ -129,18 +120,21 @@ public class sym {
   "RETURN",
   "BREAK",
   "CONCAT",
-  "TYPEDEF",
+  "TDEF",
+  "FDEF",
   "ALIAS",
-  "FUNCTION_DEF",
+  "OD",
+  "DO",
+  "THREAD",
   "IF",
   "FI",
   "THEN",
   "ELSE",
   "LOOP",
   "POOL",
-  "ELIF",
   "WHILE",
   "FORALL",
+  "ELIF",
   "IDENTIFIER",
   "NUMBER",
   "STRING",
